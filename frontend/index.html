@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="description" content="web_gialap_Android – Điện thoại Android ảo chạy trên trình duyệt, dữ liệu lưu ngay trên máy bạn." />
+  <title>web_gialap_Android – Điện thoại Android ảo</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="theme-dark">
+
+  <div class="stage">
+
+    <!-- ══════════ KHUNG ĐIỆN THOẠI ẢO ══════════ -->
+    <div class="device" id="device">
+      <div class="device-frame"></div>
+      <div class="device-notch"></div>
+
+      <div class="screen" id="screen">
+
+        <!-- THANH TRẠNG THÁI -->
+        <div class="statusbar" id="statusbar">
+          <span class="sb-left">
+            <span class="sb-time" id="sbTime">00:00</span>
+          </span>
+          <span class="sb-right">
+            <span class="sb-icon" id="sbSignal" title="Tín hiệu">▂▄▆█</span>
+            <span class="sb-icon" id="sbWifi" title="Wi-Fi">Wi-Fi</span>
+            <span class="sb-icon sb-battery" id="sbBattery" title="Pin">100%</span>
+          </span>
+        </div>
+
+        <!-- 1. MÀN HÌNH KHỞI ĐỘNG -->
+        <div class="layer layer-boot active" id="bootLayer">
+          <div class="boot-logo">🤖</div>
+          <div class="boot-name">web_gialap_Android</div>
+          <div class="boot-bar"><span></span></div>
+        </div>
+
+        <!-- 2. MÀN HÌNH KHÓA -->
+        <div class="layer layer-lock" id="lockLayer">
+          <div class="lock-clock" id="lockClock">00:00</div>
+          <div class="lock-date" id="lockDate">...</div>
+          <div class="lock-hint">
+            <span class="lock-arrow">▲</span>
+            Vuốt lên để mở khóa
+          </div>
+        </div>
+
+        <!-- 3. MÀN HÌNH CHÍNH -->
+        <div class="layer layer-home" id="homeLayer">
+          <div class="home-widget" id="homeWidget">
+            <div class="hw-time" id="hwTime">00:00</div>
+            <div class="hw-date" id="hwDate">...</div>
+          </div>
+          <div class="home-grid" id="homeGrid"><!-- icon app JS render --></div>
+          <div class="home-dock" id="homeDock"><!-- dock --></div>
+        </div>
+
+        <!-- 4. NGĂN KÉO ỨNG DỤNG -->
+        <div class="layer layer-drawer" id="drawerLayer">
+          <div class="drawer-search">🔍 Tìm ứng dụng</div>
+          <div class="drawer-grid" id="drawerGrid"></div>
+        </div>
+
+        <!-- 5. CỬA SỔ ỨNG DỤNG -->
+        <div class="layer layer-app" id="appLayer">
+          <div class="app-topbar">
+            <button class="app-back" id="appBack" title="Quay lại">‹</button>
+            <span class="app-title" id="appTitle">Ứng dụng</span>
+            <span class="app-badge" title="Dữ liệu lưu trên máy bạn">📱 local</span>
+          </div>
+          <div class="app-body" id="appBody"><!-- nội dung app --></div>
+        </div>
+
+        <!-- 6. ỨNG DỤNG GẦN ĐÂY -->
+        <div class="layer layer-recents" id="recentsLayer">
+          <div class="recents-title">Gần đây</div>
+          <div class="recents-list" id="recentsList"></div>
+          <button class="recents-clear" id="recentsClear">✕ Xóa tất cả</button>
+        </div>
+
+        <!-- THANH ĐIỀU HƯỐNG -->
+        <div class="navbar" id="navbar">
+          <button class="nav-btn" data-nav="back" title="Quay lại">◁</button>
+          <button class="nav-btn" data-nav="home" title="Trang chủ">◯</button>
+          <button class="nav-btn" data-nav="recents" title="Gần đây">▢</button>
+        </div>
+
+        <!-- THÔNG BÁO (toast) -->
+        <div class="toast" id="toast"></div>
+      </div>
+    </div>
+
+    <!-- ══════════ BẢNG THÔNG TIN BÊN NGOÀI ══════════ -->
+    <aside class="info-panel">
+      <h1>📱 web_gialap_Android</h1>
+      <p class="tagline">Điện thoại Android ảo – chạy 100% trên trình duyệt của bạn.</p>
+
+      <div class="info-card highlight">
+        <h3>💾 Dữ liệu lưu ở đâu?</h3>
+        <p>
+          <strong>Trên chính máy bạn.</strong> Mọi ứng dụng, ghi chú, cài đặt
+          đều ghi vào <strong>RAM &amp; ổ đĩa</strong> của bạn
+          (<code>localStorage</code> trên trình duyệt) –
+          <strong>không có server, không gửi dữ liệu đi đâu.</strong>
+        </p>
+        <div class="usage">
+          <div class="usage-label">Bộ nhớ đã dùng trên máy bạn:</div>
+          <div class="usage-bar"><span id="usageBar" style="width:0%"></span></div>
+          <div class="usage-text" id="usageText">đang tính…</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h3>🎮 Tính năng</h3>
+        <ul>
+          <li>Màn hình, thanh trạng thái, thanh điều hướng như Android thật</li>
+          <li>Mở khóa bằng vuốt, ngăn kéo ứng dụng, ứng dụng gần đây</li>
+          <li><strong>Chrome</strong> (logo thật) lướt web trong khung điện thoại</li>
+          <li><strong>Google</strong> (logo G thật) → mở google.com ở tab mới</li>
+          <li>Điện thoại · Tin nhắn · Máy ảnh · Thư viện · Đồng hồ · Tệp</li>
+          <li><strong>CH Play</strong> → cài game (Rắn, 2048, Caro, Đoán Số) chơi được thật</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>🚧 Sắp tới</h3>
+        <ul>
+          <li>Cài APK thật (chạy bằng WebAssembly/emulator)</li>
+          <li>Nhiều thiết bị ảo (multi-instance)</li>
+          <li>Stream WebRTC lên cloud (tùy chọn)</li>
+        </ul>
+      </div>
+
+      <div class="info-card tips">
+        <h3>💡 Thử ngay</h3>
+        <ul>
+          <li>Vuốt <strong>lên</strong> ở màn hình khóa để vào</li>
+          <li>Mở <strong>CH Play</strong> → Cài đặt game → icon tự thêm vào màn hình chính</li>
+          <li>Bấm <strong>Google</strong> → mở google.com thật ở tab mới</li>
+          <li>Mở <strong>Ghi chú</strong> → tạo ghi chú → F5 → vẫn còn!</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/storage.js"></script>
+  <script src="js/apps.js"></script>
+  <script src="js/games.js"></script>
+  <script src="js/apps_phone.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
